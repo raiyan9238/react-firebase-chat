@@ -15,10 +15,11 @@ body{
    
 }
 .container{
-  width: 90vw;
+  width: 80vw;
   height: 90vh;
   background-color: rgba(19, 6, 32, 0.365);
   backdrop-filter: blur(19px) saturate(180%);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.205);
+  display: flex;
 }
