@@ -51,5 +51,5 @@ export const Chatlist = () => {
         </div>
         {addMode && <AddUser/>}
     </div>
-  )
+  ) 
 }
