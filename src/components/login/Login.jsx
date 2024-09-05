@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./login.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -9,7 +9,7 @@ import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 
-export const Login = () => {
+const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
@@ -30,7 +30,21 @@ export const Login = () => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData(e.target);
+
     const { username, email, password } = Object.fromEntries(formData);
+
+    // VALIDATE INPUTS
+    if (!username || !email || !password)
+      return toast.warn("Please enter inputs!");
+    if (!avatar.file) return toast.warn("Please upload an avatar!");
+
+    // VALIDATE UNIQUE USERNAME
+    const usersRef = collection(db, "users");
+    const q = query(usersRef, where("username", "==", username));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return toast.warn("Select another username");
+    }
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -49,7 +63,7 @@ export const Login = () => {
         chats: [],
       });
 
-      toast.success("Account Created!! You can login now!");
+      toast.success("Account created! You can login now!");
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -61,12 +75,12 @@ export const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     const formData = new FormData(e.target);
     const { email, password } = Object.fromEntries(formData);
 
     try {
-      await signInWithEmailAndPassword(auth,email,password)
-
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -78,8 +92,8 @@ export const Login = () => {
   return (
     <div className="login">
       <div className="item">
-        <h2>Welcome Back</h2>
-        <form action="" onSubmit={handleLogin}>
+        <h2>Welcome back,</h2>
+        <form onSubmit={handleLogin}>
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
           <button disabled={loading}>{loading ? "Loading" : "Sign In"}</button>
@@ -88,7 +102,7 @@ export const Login = () => {
       <div className="separator"></div>
       <div className="item">
         <h2>Create an Account</h2>
-        <form action="" onSubmit={handleRegister}>
+        <form onSubmit={handleRegister}>
           <label htmlFor="file">
             <img src={avatar.url || "./avatar.png"} alt="" />
             Upload an image
@@ -108,3 +122,5 @@ export const Login = () => {
     </div>
   );
 };
+
+export default Login;
