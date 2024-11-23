@@ -8,7 +8,10 @@ import {
 import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
+import { collection, query, where, getDocs } from "firebase/firestore";
+export const kholil = () =>{
 
+}
 const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,

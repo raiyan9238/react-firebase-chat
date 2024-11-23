@@ -31,7 +31,7 @@ const Chat = () => {
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [chat.messages]);
+  }, []);
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
@@ -128,7 +128,7 @@ const Chat = () => {
         </div>
       </div>
       <div className="center">
-        {chat?.messages?.map((message) => (
+        {/* {chat?.messages?.map((message) => (
           <div
             className={
               message.senderId === currentUser?.id ? "message own" : "message"
@@ -141,7 +141,7 @@ const Chat = () => {
               <span>{format(message.createdAt.toDate())}</span>
             </div>
           </div>
-        ))}
+        ))} */}
         {img.url && (
           <div className="message own">
             <div className="texts">

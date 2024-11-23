@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Chat from "./components/chat/Chat";
 import Detail from "./components/detail/Detail";
 import List from "./components/list/List";
+
 import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import { onAuthStateChanged } from "firebase/auth";
@@ -12,6 +13,10 @@ import { useChatStore } from "./lib/chatStore";
 const App = () => {
   const { currentUser, isLoading, fetchUserInfo } = useUserStore();
   const { chatId } = useChatStore();
+
+  useEffect(() => {
+    console.log(currentUser)
+  }, [currentUser])
 
   useEffect(() => {
     const unSub = onAuthStateChanged(auth, (user) => {

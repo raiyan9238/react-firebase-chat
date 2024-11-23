@@ -1,8 +1,8 @@
 import React from 'react'
 import './list.css'
-import { UserInfo } from './userInfo/UserInfo'
-import { Chatlist } from './chatList/Chatlist'
-export const List = () => {
+import  UserInfo  from './userInfo/UserInfo'
+import  Chatlist  from './chatList/Chatlist'
+const List = () => {
   return (
     <div className='list'>
         <UserInfo/>
@@ -10,3 +10,4 @@ export const List = () => {
     </div>
   )
 }
+export default List
