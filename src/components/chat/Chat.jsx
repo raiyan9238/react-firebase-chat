@@ -67,14 +67,19 @@ const Chat = () => {
         imgUrl = await upload(img.file);
       }
 
-      await updateDoc(doc(db, "chats", chatId), {
-        messages: arrayUnion({
-          senderId: currentUser.id,
-          text,
-          createdAt: new Date(),
-          ...(imgUrl && { img: imgUrl }),
-        }),
-      });
+      // Update the chat state with the new message
+      setChat((prevChat) => ({
+        ...prevChat,
+        messages: [
+          ...prevChat.messages,
+          {
+            senderId: currentUser.id,
+            text,
+            createdAt: new Date(),
+            ...(imgUrl && { img: imgUrl }),
+          },
+        ],
+      }));
 
       const userIDs = [currentUser.id, user.id];
 
@@ -101,13 +106,13 @@ const Chat = () => {
       });
     } catch (err) {
       console.log(err);
-    } finally{
-    setImg({
-      file: null,
-      url: "",
-    });
+    } finally {
+      setImg({
+        file: null,
+        url: "",
+      });
 
-    setText("");
+      setText("");
     }
   };
 
@@ -118,30 +123,27 @@ const Chat = () => {
           <img src={user?.avatar || "./avatar.png"} alt="" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p>Lorem ipsum dolor, sit amet.</p>
           </div>
         </div>
         <div className="icons">
-          <img src="./phone.png" alt="" />
-          <img src="./video.png" alt="" />
           <img src="./info.png" alt="" />
         </div>
       </div>
       <div className="center">
-        {/* {chat?.messages?.map((message) => (
+        {chat?.messages?.map((message, index) => (
           <div
             className={
               message.senderId === currentUser?.id ? "message own" : "message"
             }
-            key={message?.createAt}
+            key={index}
           >
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
               <p>{message.text}</p>
-              <span>{format(message.createdAt.toDate())}</span>
+              <span>{format(message.createdAt)}</span>
             </div>
           </div>
-        ))} */}
+        ))}
         {img.url && (
           <div className="message own">
             <div className="texts">
@@ -162,8 +164,6 @@ const Chat = () => {
             style={{ display: "none" }}
             onChange={handleImg}
           />
-          <img src="./camera.png" alt="" />
-          <img src="./mic.png" alt="" />
         </div>
         <input
           type="text"
