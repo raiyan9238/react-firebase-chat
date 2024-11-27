@@ -9,16 +9,16 @@ import { auth, db } from "../../lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 import upload from "../../lib/upload";
 import { collection, query, where, getDocs } from "firebase/firestore";
-export const kholil = () =>{
 
-}
 const Login = () => {
   const [avatar, setAvatar] = useState({
     file: null,
     url: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  // Separate loading states for sign-up and sign-in
+  const [signUpLoading, setSignUpLoading] = useState(false);
+  const [signInLoading, setSignInLoading] = useState(false);
 
   const handleAvatar = (e) => {
     if (e.target.files[0]) {
@@ -31,7 +31,8 @@ const Login = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Use signUpLoading instead of global loading
+    setSignUpLoading(true);
     const formData = new FormData(e.target);
 
     const { username, email, password } = Object.fromEntries(formData);
@@ -46,6 +47,7 @@ const Login = () => {
     const q = query(usersRef, where("username", "==", username));
     const querySnapshot = await getDocs(q);
     if (!querySnapshot.empty) {
+      setSignUpLoading(false);
       return toast.warn("Select another username");
     }
 
@@ -71,13 +73,14 @@ const Login = () => {
       console.log(err);
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setSignUpLoading(false);
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    // Use signInLoading instead of global loading
+    setSignInLoading(true);
 
     const formData = new FormData(e.target);
     const { email, password } = Object.fromEntries(formData);
@@ -88,7 +91,7 @@ const Login = () => {
       console.log(err);
       toast.error(err.message);
     } finally {
-      setLoading(false);
+      setSignInLoading(false);
     }
   };
 
@@ -99,7 +102,9 @@ const Login = () => {
         <form onSubmit={handleLogin}>
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={loading}>{loading ? "Loading" : "Sign In"}</button>
+          <button disabled={signInLoading}>
+            {signInLoading ? "Loading" : "Sign In"}
+          </button>
         </form>
       </div>
       <div className="separator"></div>
@@ -119,7 +124,9 @@ const Login = () => {
           <input type="text" placeholder="Username" name="username" />
           <input type="text" placeholder="Email" name="email" />
           <input type="password" placeholder="Password" name="password" />
-          <button disabled={loading}>{loading ? "Loading" : "Sign Up"}</button>
+          <button disabled={signUpLoading}>
+            {signUpLoading ? "Loading" : "Sign Up"}
+          </button>
         </form>
       </div>
     </div>

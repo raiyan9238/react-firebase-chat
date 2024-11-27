@@ -126,7 +126,7 @@ const Chat = () => {
           </div>
         </div>
         <div className="icons">
-          <img src="./info.png" alt="" />
+          {/* <img src="./info.png" alt="" /> */}
         </div>
       </div>
       <div className="center">
