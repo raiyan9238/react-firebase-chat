@@ -81,6 +81,15 @@ const Chat = () => {
         ],
       }));
 
+      await updateDoc(doc(db, "chats", chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date(),
+          ...(imgUrl && { img: imgUrl }),
+        }),
+      });
+
       const userIDs = [currentUser.id, user.id];
 
       userIDs.forEach(async (id) => {
@@ -175,6 +184,9 @@ const Chat = () => {
           value={text}
           onChange={(e) => setText(e.target.value)}
           disabled={isCurrentUserBlocked || isReceiverBlocked}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") handleSend()
+          }}
         />
         <div className="emoji">
           <img
