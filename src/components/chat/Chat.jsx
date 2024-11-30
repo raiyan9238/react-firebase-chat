@@ -35,6 +35,7 @@ const Chat = () => {
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
+      console.log(res.data())
       setChat(res.data());
     });
 
@@ -57,8 +58,14 @@ const Chat = () => {
     }
   };
 
+  useEffect(() => {
+    if (img?.file && img?.url) {
+      handleSend()
+    }
+  }, [img])
+
   const handleSend = async () => {
-    if (text === "") return;
+    if (text === "" && img?.file == null) return;
 
     let imgUrl = null;
 
@@ -148,8 +155,10 @@ const Chat = () => {
           >
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
-              <p>{message.text}</p>
-              <span>{format(message.createdAt)}</span>
+              {message.text ? (
+                <p>{message.text}</p>
+              ) : null}
+              <span>{format(message.createdAt.seconds * 1000)}</span>
             </div>
           </div>
         ))}
