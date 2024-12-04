@@ -3,12 +3,9 @@ import { useChatStore } from "../../lib/chatStore";
 import { db } from "../../lib/firebase";
 import { useUserStore } from "../../lib/userStore";
 import "./detail.css";
-import { auth } from "../../lib/firebase";
 
-const handleLogout = () => {
-  auth.signOut();
-  resetChat();
-};
+
+
 
 const Detail = () => {
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } =
@@ -48,9 +45,7 @@ const Detail = () => {
             ? "Unblock User"
             : "Block User"}
         </button>
-        <button className="logout" onClick={handleLogout}>
-          Dummy Button
-        </button>
+        
       </div>
     </div>
   );
