@@ -4,9 +4,6 @@ import { db } from "../../lib/firebase";
 import { useUserStore } from "../../lib/userStore";
 import "./detail.css";
 
-
-
-
 const Detail = () => {
   const { user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } =
     useChatStore();
@@ -45,7 +42,6 @@ const Detail = () => {
             ? "Unblock User"
             : "Block User"}
         </button>
-        
       </div>
     </div>
   );
